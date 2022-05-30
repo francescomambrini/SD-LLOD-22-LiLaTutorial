@@ -1,0 +1,24 @@
+PREFIX lilaCorpora: <http://lila-erc.eu/ontologies/lila_corpora/>
+PREFIX marl: <http://www.gsi.dit.upm.es/ontologies/marl/ns#>
+PREFIX lime: <http://www.w3.org/ns/lemon/lime#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX powla: <http://purl.org/powla/powla.owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix lila: <http://lila-erc.eu/ontologies/lila/>
+
+SELECT ?lex ?lab (count(?lex) as ?tot)  where {
+  VALUES ?copora {
+          <http://lila-erc.eu/data/corpora/ITTB/id/corpus>
+          <http://lila-erc.eu/data/corpora/UDante/id/corpus>
+    }
+   ?token rdf:type powla:Terminal;
+       powla:hasStringValue ?str ;
+       powla:hasLayer/powla:hasDocument/^powla:hasSubDocument ?copora ;
+       ^lilaCorpora:hasDep/rdf:type <https://universaldependencies.org/u/dep/nsubj> ;
+       lila:hasLemma/^ontolex:canonicalForm ?lex .
+  ?lex ^lime:entry <http://lila-erc.eu/data/lexicalResources/LatinAffectus/Lexicon> ;
+		rdfs:label ?lab ;
+        ontolex:sense/marl:hasPolarity marl:Negative
+}
+order by desc(?tot)

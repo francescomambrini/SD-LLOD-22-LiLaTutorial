@@ -1,0 +1,36 @@
+PREFIX lime: <http://www.w3.org/ns/lemon/lime#>
+PREFIX marl: <http://www.gsi.dit.upm.es/ontologies/marl/ns#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX powla: <http://purl.org/powla/powla.owl#>
+PREFIX lila: <http://lila-erc.eu/ontologies/lila/>
+PREFIX lilaCorpora: <http://lila-erc.eu/ontologies/lila_corpora/>
+
+# Triplets: (negative) nsubj, pred, obj
+# CAREFUL! Obj's are not always there...
+
+
+SELECT ?tok_sbj ?sbj_lab ?pred_lab ?obj_lab  where {
+  VALUES ?copora {
+          <http://lila-erc.eu/data/corpora/ITTB/id/corpus>
+          <http://lila-erc.eu/data/corpora/UDante/id/corpus>
+    }
+
+   ?rel_sbj a lilaCorpora:DependencyRel, <https://universaldependencies.org/u/dep/nsubj> ;
+      lilaCorpora:hasHead ?tok_pred ;
+      lilaCorpora:hasDep ?tok_sbj .
+   ?tok_sbj lila:hasLemma ?lemma .
+   ?lemma rdfs:label ?sbj_lab ;
+       ^ontolex:canonicalForm ?lex .
+   ?lex ^lime:entry <http://lila-erc.eu/data/lexicalResources/LatinAffectus/Lexicon> ;
+      ontolex:sense/marl:hasPolarity marl:Negative .
+
+   ?tok_pred lila:hasLemma/rdfs:label ?pred_lab .
+
+    OPTIONAL {
+      ?rel_obj lilaCorpora:hasHead ?tok_pred ;
+         a lilaCorpora:DependencyRel, <https://universaldependencies.org/u/dep/obj>  ;
+        lilaCorpora:hasDep ?tok_obj .
+      ?tok_obj lila:hasLemma/rdfs:label ?obj_lab .
+    }
+}

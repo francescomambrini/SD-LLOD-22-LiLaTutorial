@@ -1,0 +1,25 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lime: <http://www.w3.org/ns/lemon/lime#>
+PREFIX lemonEty: <http://lari-datasets.ilc.cnr.it/lemonEty#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX lila: <http://lila-erc.eu/ontologies/lila/>
+
+# List of all derivative lemmas of a word with PIE etymology
+# Same as before
+# BUT the lemma of the Lexical Entry must be attached to a base
+# the derivatives are attached to the same base
+#
+# But what if we want ONLY the derivatives?
+
+# Play around and replace "PIE" with "grc". What happens?
+
+SELECT ?lemma ?lemmalab ?e ?elab WHERE {
+  ?l a lila:Lemma .
+  ?le ontolex:canonicalForm ?l ;
+      lemonEty:etymology ?e .
+  ?e lemonEty:etymon/lime:language "PIE" ;
+     rdfs:label ?elab .
+  ?l lila:hasBase/^lila:hasBase ?lemma .
+  ?lemma rdfs:label ?lemmalab .
+}
+order by ?e

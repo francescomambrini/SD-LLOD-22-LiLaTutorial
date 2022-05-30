@@ -1,0 +1,27 @@
+PREFIX marl: <http://www.gsi.dit.upm.es/ontologies/marl/ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lime: <http://www.w3.org/ns/lemon/lime#>
+PREFIX lemonEty: <http://lari-datasets.ilc.cnr.it/lemonEty#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+
+# List all synsets linked to Positive/Negative words
+#
+# - Start with a LE and a connected Lemma
+# - The LE belongs to the LatinAffectus lexicon
+# - The LE has a Positive (or Negative) polarity
+# - The same lemma is used for LE2 which belongs to LatinWordNet
+# - And LE2 is linked to a WordNet Synset
+# - we want the definition of the synset
+
+SELECT distinct ?lemma ?lemlab ?syn ?def {
+  ?le_sent ontolex:canonicalForm ?lemma ;
+      rdfs:label ?lemlab ;
+      ^lime:entry <http://lila-erc.eu/data/lexicalResources/LatinAffectus/Lexicon> ;
+       ontolex:sense/marl:hasPolarity marl:Positive .
+  ?le_lwn ontolex:canonicalForm ?lemma ;
+      ^lime:entry <http://lila-erc.eu/data/lexicalResources/LatinWordNet/Lexicon> ;
+       ontolex:evokes ?syn .
+  ?syn skos:definition ?def .
+}
+order by ?lemma

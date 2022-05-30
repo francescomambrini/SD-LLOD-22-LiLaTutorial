@@ -1,0 +1,13 @@
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+prefix powla: <http://purl.org/powla/powla.owl#>
+prefix corpora: <http://lila-erc.eu/ontologies/lila_corpora/>
+
+
+SELECT ?corpus ?Textual_Resource_title (count(?t) as ?tot_tokens)
+WHERE {
+  ?corpus a powla:Corpus ;
+           dc:title ?Textual_Resource_title .
+  ?t a powla:Terminal ;
+      powla:hasLayer/powla:hasDocument/^powla:hasSubDocument ?corpus .
+}
+group by ?corpus ?Textual_Resource_title

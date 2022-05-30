@@ -1,0 +1,14 @@
+
+
+# List all lemmas that are linked to a PIE etymology
+# - Start with a lemma
+# - that has a label
+# - it is used as canonical form of a LE
+# - Walk the path: LE -> Etymology -> Etymon -> Language = 'PIE'
+
+# PROBLEM:
+# How would you write to query to search for lemmas linked to PIE *or* PIt?
+
+# SOLUTION:
+# Use filter with e.g. a REGEX:
+# FILTER( REGEX( ?lang, "PI[Et]") )

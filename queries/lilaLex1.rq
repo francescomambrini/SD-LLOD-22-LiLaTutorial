@@ -1,0 +1,21 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lime: <http://www.w3.org/ns/lemon/lime#>
+PREFIX lemonEty: <http://lari-datasets.ilc.cnr.it/lemonEty#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX lila: <http://lila-erc.eu/ontologies/lila/>
+
+# List all lemmas that are linked to a PIE etymology
+# - Start with a lemma
+# - that has (multiple) Written Rep(s)
+# - it is used as canonical form of a LE
+# - Walk the path: LE -> Etymology -> Etymon -> Language = 'PIE'
+# We want to *concatenate all WR's*
+
+SELECT ?lemma (GROUP_CONCAT(?wr ;separator=", ") as ?wrs ) WHERE {
+  ?lemma a lila:Lemma ;
+     ontolex:writtenRep ?wr .
+  ?le ontolex:canonicalForm ?lemma ;
+      lemonEty:etymology/lemonEty:etymon/lime:language "PIE" .
+}
+group by ?lemma
+

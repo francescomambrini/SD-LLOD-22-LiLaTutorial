@@ -1,0 +1,22 @@
+PREFIX lila: <http://lila-erc.eu/ontologies/lila/>
+PREFIX marl: <http://www.gsi.dit.upm.es/ontologies/marl/ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lime: <http://www.w3.org/ns/lemon/lime#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX wfl: <http://lila-erc.eu/ontologies/lila/wfl/>
+PREFIX vartrans: <http://www.w3.org/ns/lemon/vartrans#>
+
+# Let's see what are the prefix/suffix most used in derivation rules
+
+SELECT ?aff  ?afflab ?type (count(?aff) as ?count) {
+  ?rule wfl:involves ?aff .
+  ?aff rdfs:label ?afflab ;
+    a ?type .
+  ?le a ontolex:LexicalEntry ;
+       ^lime:entry <http://lila-erc.eu/data/lexicalResources/WFL/Lexicon> ;
+       ^vartrans:target/wfl:hasWordFormationRule ?rule ;
+        ontolex:canonicalForm/lila:hasPOS lila:noun .
+}
+group by ?aff ?afflab ?type
+ORDER BY DESC(?count)

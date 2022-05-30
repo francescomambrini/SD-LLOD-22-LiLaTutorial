@@ -1,0 +1,20 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX lila: <http://lila-erc.eu/ontologies/lila/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+prefix powla: <http://purl.org/powla/powla.owl#>
+PREFIX vartrans: <http://www.w3.org/ns/lemon/vartrans#>
+PREFIX wfl: <http://lila-erc.eu/ontologies/lila/wfl/>
+
+# Lemmas that have the suffix -(t)io but where the suffix is not linked to the
+# derivation rule
+
+SELECT *
+WHERE {
+  ?lemma lila:hasSuffix <http://lila-erc.eu/data/id/suffix/2> ;
+         rdfs:label ?lab
+
+  minus{
+    ?lemma ^ontolex:canonicalForm/^vartrans:target/wfl:hasWordFormationRule/wfl:involves <http://lila-erc.eu/data/id/suffix/2>
+  }
+}
