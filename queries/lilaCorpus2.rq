@@ -7,6 +7,19 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 prefix lila: <http://lila-erc.eu/ontologies/lila/>
 
+# Get all negative words used as subjects in the ITTB and UDante.
+# Count their frequency and sort them from the more to the less frequent
+#
+# - start with a Terminal (and its string value)
+# - attached to a corpus (path: token -> layer -> document <- corpus)
+# - the token is the Nominal Subject, i.e.:
+#     - it is in a dependency relation
+#     - it's the *governed* (dependent) node (subjects are governed by verbs)
+#     - the relation has type: ud:nsubj
+# - the token has a lemma
+# - the lemma is the canonicalForm of a LexEntry from LatinAffectus
+# - the LexEntry has negative polarity
+
 SELECT ?lex ?lab (count(?lex) as ?tot)  where {
   VALUES ?copora {
           <http://lila-erc.eu/data/corpora/ITTB/id/corpus>
@@ -21,4 +34,5 @@ SELECT ?lex ?lab (count(?lex) as ?tot)  where {
 		rdfs:label ?lab ;
         ontolex:sense/marl:hasPolarity marl:Negative
 }
+group by ?lex ?lab
 order by desc(?tot)

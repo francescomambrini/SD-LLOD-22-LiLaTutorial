@@ -1,0 +1,20 @@
+# Exploration of our dataset:
+# LiLa is a collection of LEMMAS!
+# So let's take a lemma and see the triples where this lemma is subj and obj
+# with all properties
+
+
+SELECT ?s ?p ?o WHERE {
+  {
+  VALUES ?s {
+          <http://lila-erc.eu/data/id/lemma/868>
+    }
+  ?s ?p ?o
+  }
+  UNION {
+  VALUES ?o {
+          <http://lila-erc.eu/data/id/lemma/868>
+    }
+  ?s ?p ?o
+  }
+}
